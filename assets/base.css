@@ -1,0 +1,164 @@
+	body {
+			margin: 0 auto; 
+			width: 550px;
+			font-family: Arial, Helvetica, Sans-Serif;
+		}
+
+	header h1{
+		color: #b3b3b3;
+		text-align: center;
+		text-rendering: optimizeLegibility;
+	}
+
+	footer{
+		text-align: center;
+	}
+
+	#stripe{
+		height: 15px;
+		background-color: #8d7d77;
+	}
+
+	/*PlaceHolder style*/
+	::-webkit-input-placeholder {
+	   color: #d9d9d9;
+	}
+
+	:-moz-placeholder { /* Firefox 18- */
+	   color: red;  
+	}
+
+	::-moz-placeholder {  /* Firefox 19+ */
+	   color: red;  
+	}
+
+	:-ms-input-placeholder {  
+	   color: red;  
+	}
+
+	#todo-list li{
+		border-bottom: 1px dotted #adadad;
+	}
+
+	#toggleContainer{
+		background-color: rgba(0, 0, 0, 0.02);
+	}
+
+	#addNew{
+		display: inline-block;
+		width: 85%;
+	}
+
+	#toggle{
+		width: 8%;
+		display: inline-block;
+	}
+
+	.toggle{
+		-webkit-appearance: none;
+		-ms-appearance: none;
+		-o-appearance: none;
+		appearance: none;
+		outline: none;
+		width: 44px;
+		margin: 0;
+		border: 0;
+		padding-left: 14px;
+		color: #d9d9d9;
+	}
+
+	.toggle:after{
+		content: '✔';
+		font-size: 20px;
+	}
+
+	#main{
+		padding: 2%	;
+	}
+
+	#toggle-all{
+		transform: rotate(90deg);
+		-webkit-appearance: none;
+		color: #d9d9d9;
+		margin: 0;
+	}
+
+	#toggle-pad{
+		margin: 0;
+		padding-left: 18px;
+	}
+
+	#toggle-all:before{
+		content: '\00bb';
+		font-size: 28px;
+	}
+
+	label[for='toggle-all']{
+		display: none;
+	}
+
+	#new-todo{
+		border: none;
+		padding: 16px;
+		margin: 0;
+		width: 100%;
+		font-size: 24px;
+		outline: none;
+	}
+
+	#todo-list{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.child{
+		height: 40px;
+		padding-top: 10px;
+	}
+
+	.todo-title{
+		padding-left: 16px;
+		font-size: 24px;
+		display: inline-block;
+		width: 450px;
+	}
+
+	.todo-title:after {
+		white-space: pre;
+	}
+
+	.delete{
+		-webkit-appearance: none;
+		-ms-appearance: none;
+		-o-appearance: none;
+		appearance: none;
+		outline: none;
+		padding: 0;
+		margin: 0;
+		background: none;
+		border: 0;
+	}
+
+	.delete:after{
+		content: '✖';
+		font-size: 24px;
+		color: #a88a8a;
+
+	}
+
+	.todo-content{
+		border-top: 1px dotted #adadad;
+	}
+
+	.addColor{
+		color: green;
+	}
+
+	.removeColor{
+		color: #d9d9d9;
+	}
+
+	.addLine{
+		text-decoration: line-through;
+	}
