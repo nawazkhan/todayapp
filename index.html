@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <!-- 
+  IE  has several modes - edge is the latest  mode
+  chrome frame = true for chrome = 1 (if IE does not support some functionalities, chrome frame plug-in runs chrome engine inside IE) Chrome Frame is no more supported by Google
+  -->
+  <title>Today App</title>
+</head>
+<link rel="stylesheet" type="text/css" href="assets/base.css">
+<body>
+	<section id="todoapp">
+	    <header id="header">
+	    	<h1>TODAY</h1>  
+	    </header>
+	   
+	   	<div id="stripe"></div>
+	   	<div id="toggleContainer">
+	    	<div id="toggle">
+			    <div id="toggle-pad">
+				    <input id="toggle-all" type="checkbox">
+				    <label for="toggle-all">Mark all as complete</label>
+			    </div>
+	    	</div>
+	    	<div id="addNew"><input id="new-todo" placeholder="What needs to be done?" autofocus></div>
+	    </div>
+	</section>
+	<section class="todo-content">
+		<ul id="todo-list"></ul>
+	</section>
+	<footer>
+		<div id="info">
+	    <p>Written by <a href="https://github.com/nawazkhan">Nawaz Khan</a></p>
+	    <p>Stubhub CX Team</p>
+	  </div>
+	</footer>
+  
+
+  
+  
+
+
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/underscore-min.js"></script>
+  <script src="js/lib/backbone-min.js"></script>
+</body>
+</html>
