@@ -11,39 +11,190 @@
 </head>
 <link rel="stylesheet" type="text/css" href="assets/base.css">
 <body>
-	<section id="todoapp">
-	    <header id="header">
-	    	<h1>TODAY</h1>  
-	    </header>
-	   
-	   	<div id="stripe"></div>
-	   	<div id="toggleContainer">
-	    	<div id="toggle">
-			    <div id="toggle-pad">
-				    <input id="toggle-all" type="checkbox">
-				    <label for="toggle-all">Mark all as complete</label>
-			    </div>
-	    	</div>
-	    	<div id="addNew"><input id="new-todo" placeholder="What needs to be done?" autofocus></div>
-	    </div>
-	</section>
-	<section class="todo-content">
-		<ul id="todo-list"></ul>
-	</section>
-	<footer>
-		<div id="info">
-	    <p>Written by <a href="https://github.com/nawazkhan">Nawaz Khan</a></p>
-	    <p>Stubhub CX Team</p>
-	  </div>
-	</footer>
+  <section id="todoapp">
+      <header id="header">
+        <h1>TODAY</h1>  
+      </header>
+     
+      <div id="stripe"></div>
+      <div id="toggleContainer">
+        <div id="toggle">
+          <div id="toggle-pad">
+            <input id="toggle-all" type="checkbox">
+            <label for="toggle-all">Mark all as complete</label>
+          </div>
+        </div>
+        <div id="addNew"><input id="new-todo" placeholder="What needs to be done?" autofocus></div>
+      </div>
+  </section>
+  <section class="todo-content">
+    <ul id="todo-list"></ul>
+  </section>
+  <footer>
+    <div id="info">
+      <p>Written by <a href="https://github.com/nawazkhan">Nawaz Khan</a></p>
+      <p>Part of Stubhub CX team</p>
+    </div>
+  </footer>
   
 
-  
+  <script type="text/template" id="item-template">
+     <div class="child">
+        <input class="toggle" type="checkbox" <%= done ? 'checked' : '' %>>
+        <div class="todo-title"><%- title %></div>
+        <button class="delete"></button>
+     </div>
+  </script>
   
 
 
   <script src="js/lib/jquery.min.js"></script>
   <script src="js/lib/underscore-min.js"></script>
   <script src="js/lib/backbone-min.js"></script>
+
+  <script type="text/javascript">
+  var TodoModel = Backbone.Model.extend({
+    defaults: 
+      {
+        title: '',
+        done: false,
+        order: ''
+      }
+  });
+
+  var TodoCollection = Backbone.Collection.extend({
+    model: TodoModel,
+    initialize: function(){
+      console.log('initializing Collection');
+    }
+  });
+
+  var todoCollection = new TodoCollection();
+
+  
+
+  var TodoView = Backbone.View.extend({
+    model: new TodoModel(),
+    tagName: 'li',
+    events: {
+      'click .delete': 'delete',
+      'dblclick .todo-title': 'edit',
+      'blur .todo-title': 'close',
+      'keyup .todo-title': 'onEnter',
+      'click .toggle': 'toggleOn'
+    },
+
+    initialize: function(){
+      console.log('initializing todoView');
+      this.template = _.template($('#item-template').html());
+    },
+
+    setDoneValue: function(){
+      var done = this.model.get('done');
+      if(done === false){
+        this.$('.toggle').removeClass('addColor');
+        this.$('.todo-title').removeClass('addLine');
+      }
+      else{
+        this.$('.toggle').addClass('addColor');
+        this.$('.todo-title').addClass('addLine');
+      }
+    },
+
+    toggleOn: function(e){
+      //e.preventDefault();
+      console.log('into toggleOn');
+      var done = this.model.get('done');
+      if(done === false){
+        console.log('into done false');
+        this.model.set('done', true);
+        this.$('.toggle').css({'color':'green'});
+        this.$('.todo-title').css({'text-decoration':'line-through'});
+      }
+      else{
+        console.log('into done true');
+        this.model.set('done', false);
+        this.$('.toggle').css('color','#d9d9d9');
+        this.$('.todo-title').css({'text-decoration':''});
+      }
+      
+    },
+
+    edit: function(e){
+      e.preventDefault();
+      this.$('.todo-title').attr('contenteditable', true).focus();
+    },
+
+    close: function(e){
+      e.preventDefault();
+      var status = this.$('.todo-title').text();
+      this.model.set('title', status);
+      this.$('.todo-title').removeAttr('contenteditable');
+    },
+
+    onEnter: function(e){
+      e.preventDefault();
+      console.log('into onEnter function');
+      if(e.which == 13 || e.keyCode == 13){
+        this.$('.todo-title').removeAttr('contenteditable');
+        console.log('into keyCode 13');
+        var status = this.$('.todo-title').text();
+        this.model.set('title', status);
+      }
+    },
+
+    delete: function(e){
+      e.preventDefault();
+      todoCollection.remove(this.model);
+      console.log(this.model.toJSON());
+    },
+
+    render: function(){
+      console.log('initializing render');
+      this.$el.html(this.template(this.model.toJSON()));
+      this.setDoneValue();
+      return this;
+    }
+  });
+
+  var TodosView = Backbone.View.extend({
+    model: todoCollection,
+    el: $('#todo-list'),
+    initialize: function(){
+      console.log('initializing TodosView');
+      this.model.on('add', this.render, this);
+      this.model.on('remove', this.render, this);
+    },
+    render: function(){
+       var self = this;
+       console.log('self',self);
+       self.$el.html('');
+       _.each(this.model.toArray(), function(todo, i){
+        self.$el.append(new TodoView({model: todo}).render().$el);
+       });
+       return this;
+    }
+  });
+
+  //global var
+  var order = 0;
+  var todoModel;
+
+  $(document).ready(function(){
+    $('#new-todo').on('keypress', function(e){
+      if((e.which || e.keyCode) == 13){
+        order++;
+        //var todoModel = new TodoModel({title: $('#new-todo').val(), done: 'false', order: order});
+        todoModel = new TodoModel({title: $('#new-todo').val(), done: false, order: order});
+        todoCollection.add(todoModel);
+        console.log('document ready - adding model to Collection', todoCollection.toJSON());
+        $('#new-todo').val('').focus();
+      }
+    });
+
+    var todoView = new TodosView();
+  });
+
+  </script>
 </body>
 </html>
